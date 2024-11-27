@@ -8,6 +8,12 @@ let cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
 // Se inicializa la variable global Tipo de Envío, que será actualizada con los eventos de los radio buttons
 let deliveryType = "Standard";
 
+// Variable global método de pago
+let paymentMethod = "Tarjeta de crédito";
+
+// Variable global de los totales
+let totals = { subtotal: 0, deliveryCost: 0, total: 0 }
+
 // Evento para llamar a la función cargarProductos
 document.addEventListener("DOMContentLoaded", cargarProductos);
 
@@ -60,8 +66,6 @@ document.getElementById("theme-toggle").addEventListener("change", function () {
     enableDayMode();
   }
 });
-
-
 
 // Función actualizar la cantidad de un producto
 function actualizarCantidad(index, change, cartItems) {
@@ -276,11 +280,21 @@ document.getElementById("standardRadioBtn").addEventListener("click", () => {
   showTotals(cartItems);
 });
 
+// Actualizar valor del método de pago
+document.getElementById("creditCardRadioBtn").addEventListener("click", () => {
+  paymentMethod = "Tarjeta de crédito";
+});
+
+document.getElementById("wireRadioBtn").addEventListener("click", () => {
+  paymentMethod = "Transferencia bancaria";
+})
+
 // Función para calcular y mostrar el costo total
 function showTotals(cartItems) {
   let subtotal = calcSubtotal(cartItems);
   let deliveryCost = calcDeliveryCost(deliveryType, subtotal);
   let total = subtotal + deliveryCost;
+  totals = { subtotal: subtotal, deliveryCost: deliveryCost, total: total }
 
   document.getElementById("order-total").textContent = `USD ${total.toFixed(2)}`;
   document.getElementById("order-subtotal").textContent = `USD ${subtotal.toFixed(2)}`;
@@ -381,11 +395,7 @@ function showTotals(cartItems) {
         delayRemoveValidation()
       } else {
         event.preventDefault();
-        form.reset();
-        form.classList.remove('was-validated');
-        localStorage.removeItem(cartKey);
-        alert("Compra realizada con éxito.");
-        window.location.replace("index.html");
+        sendOrderToServer();
       }
 
       form.classList.add('was-validated');
@@ -412,3 +422,44 @@ function showTotals(cartItems) {
     }, 500);
   }
 })();
+
+function createOrder() {
+  let address = document.getElementById("calle").value.trim() + ', '
+    + document.getElementById("numero").value.trim() + ', esq. '
+    + document.getElementById("esquina").value.trim();
+  let order = {
+    delivery_type: deliveryType,
+    department: document.getElementById("departamento").value.trim(),
+    city: document.getElementById("localidad").value.trim(),
+    address: address,
+    payment_method: paymentMethod,
+    subtotal: totals.subtotal,
+    delivery_fee: totals.deliveryCost,
+    total: totals.total,
+    products: cartItems
+  }
+  return order;
+}
+
+function sendOrderToServer() {
+  let productsOrder = createOrder();
+  fetch('http://localhost:3307/order', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(productsOrder),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      localStorage.removeItem(cartKey);
+      alert("Compra realizada con éxito.");
+      window.location.replace("index.html");
+    })
+    .catch(error => {
+      console.error('Hubo un error con la solicitud:', error);
+      alert('Se ha producido un error con su orden. Por favor, intente de nuevo más tarde.');
+    });
+};
