@@ -27,9 +27,9 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `product_count` int(11) NOT NULL,
   `img_src` varchar(50) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla ecommerce.categories: ~0 rows (aproximadamente)
+-- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla ecommerce.comments
 CREATE TABLE IF NOT EXISTS `comments` (
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   CONSTRAINT `FK2_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla ecommerce.comments: ~0 rows (aproximadamente)
+-- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla ecommerce.customers
 CREATE TABLE IF NOT EXISTS `customers` (
@@ -58,9 +58,9 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `phone` varchar(50) DEFAULT NULL,
   `profile_img` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla ecommerce.customers: ~0 rows (aproximadamente)
+-- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla ecommerce.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -73,13 +73,11 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `subtotal` float NOT NULL,
   `delivery_fee` float NOT NULL,
   `total` float NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `user_id` (`customer_id`),
-  CONSTRAINT `FK1_customer_order` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `customer_email` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla ecommerce.orders: ~0 rows (aproximadamente)
+-- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla ecommerce.orders_products
 CREATE TABLE IF NOT EXISTS `orders_products` (
@@ -87,12 +85,10 @@ CREATE TABLE IF NOT EXISTS `orders_products` (
   `product_id` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
   PRIMARY KEY (`order_id`,`product_id`),
-  KEY `FK_product_id` (`product_id`),
-  CONSTRAINT `FK_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `FK_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla ecommerce.orders_products: ~0 rows (aproximadamente)
+-- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla ecommerce.products
 CREATE TABLE IF NOT EXISTS `products` (
@@ -106,9 +102,9 @@ CREATE TABLE IF NOT EXISTS `products` (
   PRIMARY KEY (`ID`),
   KEY `cat_id` (`cat_id`),
   CONSTRAINT `FK1_cat_id` FOREIGN KEY (`cat_id`) REFERENCES `categories` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50923 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla ecommerce.products: ~0 rows (aproximadamente)
+-- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla ecommerce.product_images
 CREATE TABLE IF NOT EXISTS `product_images` (
@@ -120,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `product_images` (
   CONSTRAINT `FK_product_image` FOREIGN KEY (`product_id`) REFERENCES `products` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla ecommerce.product_images: ~0 rows (aproximadamente)
+-- La exportación de datos fue deseleccionada.
 
 -- Volcando estructura para tabla ecommerce.related_products
 CREATE TABLE IF NOT EXISTS `related_products` (
@@ -132,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `related_products` (
   CONSTRAINT `FK2_rel_product_id` FOREIGN KEY (`rel_prod_id`) REFERENCES `products` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla ecommerce.related_products: ~0 rows (aproximadamente)
+-- La exportación de datos fue deseleccionada.
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

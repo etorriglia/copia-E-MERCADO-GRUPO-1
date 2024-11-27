@@ -428,6 +428,7 @@ function createOrder() {
     + document.getElementById("numero").value.trim() + ', esq. '
     + document.getElementById("esquina").value.trim();
   let order = {
+    customer_email: user,
     delivery_type: deliveryType,
     department: document.getElementById("departamento").value.trim(),
     city: document.getElementById("localidad").value.trim(),
@@ -443,7 +444,7 @@ function createOrder() {
 
 function sendOrderToServer() {
   let productsOrder = createOrder();
-  fetch('http://localhost:3307/order', {
+  fetch('http://localhost:3307/cart', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

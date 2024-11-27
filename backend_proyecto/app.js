@@ -75,14 +75,13 @@ app.get("/sell", (req, res) => {
 
 // endoint para enviar la información del carrito a la BD al finalizar la compra
 
-app.post("/order", async (req, res) => {
-    let customerId = 1 // se va a obtener de algun lugar
+app.post("/cart", async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
         const response = await conn.query(
-            `INSERT INTO orders (delivery_type, department, city, address, payment_method, subtotal, delivery_fee, total, customer_id) VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [req.body.delivery_type, req.body.department, req.body.city, req.body.address, req.body.payment_method, req.body.subtotal, req.body.delivery_fee, req.body.total, customerId]
+            `INSERT INTO orders (delivery_type, department, city, address, payment_method, subtotal, delivery_fee, total, customer_email) VALUE(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [req.body.delivery_type, req.body.department, req.body.city, req.body.address, req.body.payment_method, req.body.subtotal, req.body.delivery_fee, req.body.total, req.body.customer_email]
         );
 
         let orderId = parseInt(response.insertId)
